@@ -1,0 +1,72 @@
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
+    volumes:
+      - ../migrations/base.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - db-data:/var/lib/mysql
+    healthcheck:
+      # test: "/usr/bin/mysql --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD --execute \"SHOW DATABASES;\""
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 2s
+      timeout: 20s
+      retries: 10
+
+  adminer:
+    image: michalhosna/adminer
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      UPLOAD_LIMIT: 1G
+    ports:
+      - 8080:8080
+
+  redis:
+    image: bitnami/redis:latest
+    user: root
+    restart: always
+    volumes:
+      - redis-data:/bitnami/redis/data
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+
+  bancho:
+    build:
+      context: .
+      dockerfile: ./Dockerfile-prod
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    tty: true
+    restart: always
+    volumes:
+      # pass the whole project to the container
+      # - .:/home/bancho
+      # - ./requirements.txt:/home/bancho/requirements.txt:ro
+      # - data:/bancho/.data
+      # - .env:/bancho/.env:ro
+      - ../:/bancho
+    ports:
+      - 5000:5000
+
+volumes:
+  data:
+  db-data:
+  redis-data:
+
+
+networks:
+  default:
+    name: bancho

@@ -1,0 +1,8 @@
+uvicorn
+fastapi
+orjson
+python-dotenv
+aiohttp
+pymysql
+cryptography
+mysqlclient
