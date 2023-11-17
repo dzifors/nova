@@ -11,7 +11,8 @@
         "ms-python.python",
         "ms-python.vscode-pylance",
         "ms-python.black-formatter",
-        "usernamehw.errorlens"
+        "usernamehw.errorlens",
+        "Gruntfuggly.todo-tree"
       ]
     }
   }
