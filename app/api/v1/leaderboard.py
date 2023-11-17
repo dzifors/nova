@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import time
+from time import perf_counter_ns
 
 from fastapi import APIRouter
 from fastapi import status
@@ -10,8 +10,9 @@ from typing import Any
 from typing import Literal
 from typing import Optional
 
-import app.state
+from app.logging import format_time_magnitude
 from app.constants.gamemodes import GameMode
+from app.state.services import database
 from app.api.common import responses
 
 router = APIRouter()
@@ -20,12 +21,12 @@ router = APIRouter()
 @router.get(path="/leaderboard", name="Get Leaderboard", description="Get leaderboard")
 async def handle_get_leaderboard(
     sort: Literal["tscore", "rscore", "pp", "acc", "plays", "playtime"] = "pp",
-    mode_arg: int = Query(0, alias="mode", ge=0, le=11),
+    mode: int = Query(0, alias="mode", ge=0, le=11),
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, min=0, max=2_147_483_647),
     country: Optional[str] = Query(None, min_length=2, max_length=2),
 ):
-    if mode_arg in (
+    if mode in (
         GameMode.RELAX_MANIA,
         GameMode.AUTOPILOT_CATCH,
         GameMode.AUTOPILOT_TAIKO,
@@ -35,7 +36,7 @@ async def handle_get_leaderboard(
             message="Invalid gamemode", status_code=status.HTTP_400_BAD_REQUEST
         )
 
-    mode = GameMode(mode_arg)
+    mode = GameMode(mode)
 
     query = f"""
         SELECT u.id as player_id, u.name, u.country, s.tscore, s.rscore,
@@ -58,9 +59,13 @@ async def handle_get_leaderboard(
     params["offset"] = offset
     params["limit"] = limit
 
-    cursor = app.state.services.database.cursor()
-    cursor.execute(query, params)
-    result = cursor.fetchall()
+    start = perf_counter_ns()
+
+    database.execute(query, params)
+    result = database.fetchall()
+
+    end = perf_counter_ns()
+    print(f"Leaderboard query took {format_time_magnitude(end - start)}")
 
     leaderboard = []
 
