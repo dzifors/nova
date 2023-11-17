@@ -1,4 +1,6 @@
 from __future__ import annotations
 
-# players = Players()
+from app.objects.collections import Players
+
+online_players = Players()
 # TODO
