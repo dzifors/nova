@@ -4,7 +4,6 @@ import io
 import ipaddress
 import sys
 import socket
-import pymysql
 
 from typing import Any
 from typing import Callable
@@ -83,26 +82,26 @@ def ensure_connected_services(timeout: float = 1.0) -> int:
     return 0
 
 
-def escape_enum(
-    val: Any,
-    _: Optional[dict[object, object]] = None,
-) -> str:  # used for ^
-    return str(int(val))
+# def escape_enum(
+#     val: Any,
+#     _: Optional[dict[object, object]] = None,
+# ) -> str:  # used for ^
+#     return str(int(val))
 
 
 T = TypeVar("T")
 
 
-def pymysql_encode(
-    conv: Callable[[Any, Optional[dict[object, object]]], str],
-) -> Callable[[T], T]:
-    """Decorator to allow for adding to pymysql's encoders."""
+# def pymysql_encode(
+#     conv: Callable[[Any, Optional[dict[object, object]]], str],
+# ) -> Callable[[T], T]:
+#     """Decorator to allow for adding to pymysql's encoders."""
 
-    def wrapper(cls: T) -> T:
-        pymysql.converters.encoders[cls] = conv  # type: ignore #HACK: this thing
-        return cls
+#     def wrapper(cls: T) -> T:
+#         pymysql.converters.encoders[cls] = conv
+#         return cls
 
-    return wrapper
+#     return wrapper
 
 
 def get_ip_from_headers(headers: Mapping[str, str]) -> IPAddress:
