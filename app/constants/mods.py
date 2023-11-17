@@ -4,8 +4,8 @@ import functools
 from enum import IntFlag
 from enum import unique
 
-from app.utils import escape_enum
-from app.utils import pymysql_encode
+# from app.utils import escape_enum
+# from app.utils import pymysql_encode
 
 __all__ = ("Mods",)
 
@@ -13,7 +13,7 @@ __all__ = ("Mods",)
 
 
 @unique
-@pymysql_encode(escape_enum)
+# @pymysql_encode(escape_enum)
 class Mods(IntFlag):
     NOMOD = 0
     NOFAIL = 1 << 0
@@ -121,7 +121,7 @@ class Mods(IntFlag):
                     break
 
             # remove all but the first keymod.
-            assert first_keymod is not None # HACK: idk why i had to do that
+            assert first_keymod is not None  # HACK: idk why i had to do that
             self &= ~(keymods_used & ~first_keymod)
 
         return self

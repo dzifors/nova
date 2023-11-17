@@ -5,10 +5,13 @@ from enum import IntEnum
 from enum import unique
 
 from app.constants.mods import Mods
-from app.utils import escape_enum
-from app.utils import pymysql_encode
 
-__all__ = ("GAMEMODE_REPR_LIST", "GameMode")
+# from app.utils import escape_enum
+# from app.utils import pymysql_encode
+
+__all__ = ("ALLOWED_GAMEMODES", "GAMEMODE_REPR_LIST", "GameMode")
+
+ALLOWED_GAMEMODES = (0, 1, 2, 3, 4, 5, 6, 8)
 
 GAMEMODE_REPR_LIST = (
     "vn!std",
@@ -27,7 +30,7 @@ GAMEMODE_REPR_LIST = (
 
 
 @unique
-@pymysql_encode(escape_enum)
+# @pymysql_encode(escape_enum)
 class GameMode(IntEnum):
     VANILLA_OSU = 0
     VANILLA_TAIKO = 1
