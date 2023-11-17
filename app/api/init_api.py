@@ -59,7 +59,6 @@ class BanchoAPI(FastAPI):
                 routes=routes,
                 tags=self.openapi_tags,
                 servers=self.servers,
-                lifespan=self.lifespan,
             )
 
         return self.openapi_schema
@@ -176,7 +175,7 @@ def init_api():
         summary="Like bancho.py, but betterer(TM)",
         terms_of_service=f"https://{app.settings.DOMAIN}/docs/tos",
         version=app.settings.VERSION,
-        lifespan=lifespan,
+        lifespan=lifespan,  # type: ignore - For some reason python typechecker does not like that even though this is correct.
     )
 
     init_middleware(asgi_app)
