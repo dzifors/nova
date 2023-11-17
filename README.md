@@ -1,2 +1,2 @@
-# bancho
-Yet another unnamed bancho clone
+# nova
+Yet another bancho clone, hopefully better than the other ones
