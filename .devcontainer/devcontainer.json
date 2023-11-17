@@ -4,7 +4,7 @@
   "service": "bancho",
   "workspaceFolder": "/bancho",
   "shutdownAction": "stopCompose",
-  "forwardPorts": [5000, 8080],
+  "forwardPorts": [6969, 8080],
   "customizations": {
     "vscode": {
       "extensions": [

@@ -59,7 +59,7 @@ services:
       # - .env:/bancho/.env:ro
       - ../:/bancho
     ports:
-      - 5000:5000
+      - 6969:6969
 
 volumes:
   data:
