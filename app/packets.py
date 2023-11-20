@@ -463,10 +463,10 @@ class BanchoPacketReader:
         self.body_view = self.body_view[1:]
 
         if not exists:
-            # no string sent.
+            # No string sent.
             return ""
 
-        # non-empty string, decode str length (uleb128)
+        # Non-empty string, decode str length (ULEB128)
         length = shift = 0
 
         while True:
